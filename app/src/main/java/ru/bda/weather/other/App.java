@@ -1,10 +1,11 @@
 package ru.bda.weather.other;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import ru.bda.weather.other.di.AppComponent;
+import ru.bda.weather.other.di.DaggerAppComponent;
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     private static AppComponent component;
 
@@ -15,6 +16,10 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        component = buildComponent();
     }
 
+    protected AppComponent buildComponent() {
+        return DaggerAppComponent.builder().build();
+    }
 }

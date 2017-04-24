@@ -1,8 +1,16 @@
 package ru.bda.weather.other.di.view;
 
-/**
- * Created by User on 21.04.2017.
- */
+import javax.inject.Singleton;
 
-public class ViewComponent {
+import dagger.Component;
+import ru.bda.weather.view.activities.TownActivity;
+import ru.bda.weather.view.fragments.WeatherDayFragment;
+
+@Singleton
+@Component(modules = {ViewDynamicModule.class})
+public interface ViewComponent {
+
+    void inject(WeatherDayFragment fragment);
+
+    void inject(TownActivity activity);
 }

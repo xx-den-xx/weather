@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import ru.bda.weather.model.api.ApiInterface;
+import ru.bda.weather.model.dto.WeatherTownDataDTO;
 import ru.bda.weather.other.App;
 import ru.bda.weather.other.Const;
 import rx.Observable;
@@ -18,7 +19,7 @@ public class ModelImpl implements Model {
     private final Observable.Transformer schedulersTransformer;
 
     @Inject
-    protected ApiInterface apiIntrface;
+    protected ApiInterface apiInterface;
 
     @Inject
     @Named(Const.UI_THREAD)
@@ -35,4 +36,14 @@ public class ModelImpl implements Model {
                 .unsubscribeOn(ioThread);
     }
 
+    @SuppressWarnings("unchecked")
+    private <T> Observable.Transformer<T, T> applySchedulers() {
+        return (Observable.Transformer<T, T>) schedulersTransformer;
+    }
+
+    @Override
+    public Observable<WeatherTownDataDTO> getWeatherDay(String city, String type, String units, String lang) {
+        return apiInterface.getWeatherDay(city, type,  units, lang, Const.API_KEY)
+                .compose(applySchedulers());
+    }
 }
