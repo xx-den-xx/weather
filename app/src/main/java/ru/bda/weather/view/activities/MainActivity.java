@@ -1,9 +1,12 @@
-package ru.bda.weather.view;
+package ru.bda.weather.view.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,27 +14,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import ru.bda.weather.R;
+import ru.bda.weather.other.di.view.ViewComponent;
+import ru.bda.weather.view.ActivityCallback;
+import ru.bda.weather.view.fragments.WeatherDayFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener, ActivityCallback{
+
+    private static final String TAG = "TAG";
+
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.fab)
     FloatingActionButton fab;
+    @Bind(R.id.toolbar_progress_bar)
+    protected ProgressBar progressBar;
+
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        //mainActivityComponent =
+        fragmentManager = getSupportFragmentManager();
 
-        fab.setOnClickListener(view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        Fragment fragment = fragmentManager.findFragmentByTag(TAG);
+        if (fragment == null) replaceFragment(new WeatherDayFragment(), false);
+
+        fab.setOnClickListener(view -> onFabClick());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -41,6 +59,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void replaceFragment(Fragment fragment, boolean addBackStack) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container, fragment, TAG);
+        if (addBackStack) transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -98,5 +123,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void showError(String error) {
+
+    }
+
+    @Override
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onFabClick() {
+        Snackbar.make(fab, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 }

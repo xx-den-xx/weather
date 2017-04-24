@@ -1,10 +1,21 @@
-<resources>
+<resources xmlns:xliff="rn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">weather</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="api_key">aa1f8aa50ffb1863a789594d7f122002</string>
+    <string name="title_activity_town">Выбор города</string>
+    <string name="placeholder_town">Введите город</string>
+    <string name="town_weather_now">Сейчас
+            <xliff:g id="temp" example="7" >%1$s</xliff:g><xliff:g id="metric" example="celsius">%2$s</xliff:g>,
+            температура в течении дня от
+            <xliff:g id="temp_min" example="6">%3$s</xliff:g><xliff:g id="metric" example="celsius">%2$s</xliff:g>
+            до <xliff:g id="temp_max" example="12">%4$s</xliff:g><xliff:g id="metric" example="celsius">%2$s</xliff:g>,
+            ветер <xliff:g id="wind" example="12,3">%5$s</xliff:g> м/с
+    </string>
+    <string name="town_goepoint">Геолокация [<xliff:g id="lat" example="12">%1$s</xliff:g>,
+        <xliff:g id="lon" example="12">%2$s</xliff:g>]</string>
 
     <string name="action_settings">Settings</string>
 </resources>
